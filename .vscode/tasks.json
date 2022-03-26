@@ -1,0 +1,33 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build mbr",
+      "type": "shell",
+      "command": "nasm -f bin src/asm/mbr.asm -o build/mbr.bin",
+      "group": "build"
+    },
+    {
+      "label": "copy mbr",
+      "type": "shell",
+      "group": "build",
+      "windows": {
+        "command": "dd bs=1c if=build/mbr.bin of=build/System_old.img count=446"
+      },
+      "linux": {
+        "command": "dd if=build/mbr.bin of=build/hdlinux.img count=446 conv=notrunc iflag=count_bytes"
+      },
+      "dependsOn": ["build mbr"]
+    },
+    {
+      "label": "run os",
+      "type": "shell",
+      //"command": "qemu-system-x86_64 -drive file=f://DEV//Zion//build//mbr.bin,index=0,media=disk,format=raw -L 'C://Program Files//qemu' ",
+      "command": "qemu-system-x86_64 -drive file=build/System.img,index=0,media=disk,format=raw -L 'C://Program Files//qemu' ",
+      "group": "build",
+      "dependsOn": ["copy mbr"]
+    }
+  ]
+}
