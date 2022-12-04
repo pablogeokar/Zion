@@ -10,4 +10,4 @@ nasm (compilador para assembly) encontrado em www.nasm.us
 editor de arquivos hexadecimais https://www.wxhexeditor.org/
 qemu (testa os boots criados em máquina virtual) https://www.qemu.org/download/#windows
 disk dump (copiar para a pasta system32 do windows) http://www.chrysocome.net/dd
-https://www.fergonez.net/softwares/fraw
+FergoRaw https://www.fergonez.net/softwares/fraw
