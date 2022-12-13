@@ -2,7 +2,7 @@
 [ORG 0x7C00]
 
 call LoadSystem
-;jmp 0800h:0000h
+jmp 0800h:0000h
 
 LoadSystem:
   mov ah, 02h

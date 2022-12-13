@@ -1,0 +1,152 @@
+;=============================================
+; ZionOS - Monitor Library Rotines
+; Created by Pablo George
+; Version 1.0.0
+;=============================================
+
+%IFNDEF __MONITOR_LIB__
+%DEFINE __MONITOR_LIB__
+
+; Main Strings ===============================
+NameSystem db "ZionOS", 0
+;---------------------------------------------
+
+
+; Monitor & Windows Configurations ======================
+Window_Bar        dw 3000h
+Window_Width      dw 3001h
+Window_Height     dw 3003h
+Window_PositionX  dw 3005h
+Window_PositionY  dw 3007h
+Window_Bar_Color  dw 300Ah
+Window_Back_Color dw 300Bh
+Button_Close      dw 300Ch
+Button_Maximize   dw 300Dh
+Button_Minimize   dw 300Eh
+State_Window_Bar  dw 0000h
+Count             dw 0000h
+
+
+BackWidth   dw 0000h
+BackHeight  dw 0000h
+BackColor   db 46
+Pagination  db 0
+CursorX     db 15
+CursorY     db 12
+State       db 0
+;---------------------------------------------
+
+; Rotine Library =============================
+;Definir o modo de vídeo e configura posição padrão
+VGA.SetVideoMode:
+  mov ah, 00h
+  mov al, 13h
+  int 10h
+  mov ax, 320
+  mov WORD[BackWidth], ax
+  mov ax, 200
+  mov WORD[BackHeight], ax
+  call DrawPixelConfig
+ret
+
+; Função de gravar pixels na tela
+DrawPixelConfig:
+  mov ah, 0Ch
+  mov al, [BackColor]
+  mov cx, 0
+  mov dx ,0
+ret
+; Pinta o fundo da tela
+DrawBackground:
+  int 10h
+  inc cx
+  cmp cx, WORD[BackWidth]
+  jne DrawBackground
+  mov cx, 0
+  inc dx
+  cmp dx, WORD[BackHeight]
+  jne DrawBackground
+  mov dx, 0
+ret
+; Exibe uma String na tela
+PrintString:
+  mov ah, 09h   ; Esta função define a cor do caractere
+  mov bh, [Pagination]  
+  mov cx, 1
+  mov al, [si]
+  print:
+    int 10h
+    inc si
+    call MoveCursor
+    mov ah, 09h
+    mov al, [si]
+    cmp al, 0
+    jne print
+ret    
+
+MoveCursor:
+  mov ah, 02h
+  mov bh, [Pagination]
+  inc dl
+  int 10h
+ret  
+
+EffectInit:
+  mov bl, 0 ; 44
+  Start:
+    mov dh, [CursorY]
+    mov dl, [CursorX]
+    call MoveCursor
+    mov si, NameSystem
+    call PrintString
+    pusha
+    mov bl, [State]
+    cmp bl, 0
+    je Increment
+    jmp Decrement
+    Increment:
+      popa
+      inc bl
+      call Waiting 
+      cmp bl, 255 ;50
+      jne Start
+      pusha
+      mov bl, 1
+      mov byte[State], bl
+      popa
+      jmp Start
+    Decrement:
+      popa
+      dec bl
+      call Waiting
+      cmp bl, 44
+      jne Start
+      pusha
+      mov bl, 0
+      mov byte[State], bl
+      mov bx, [Count]
+      inc bx 
+      mov WORD[Count], bx
+      cmp bx, 5000 ; 50 -> Máquina Virtual
+      jne ReturnLoop
+      jmp ReturnProg 
+    ReturnLoop:
+      popa
+      jmp Start
+    ReturnProg:
+      popa
+      ret
+ret
+
+Waiting:
+  pusha
+  mov bx ,0
+  time:
+    inc bx
+    cmp bx, 50000 ; 500 -> Máquina Virtual
+    jne time
+  popa
+ret
+;---------------------------------------------
+
+%ENDIF
