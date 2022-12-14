@@ -1,0 +1,36 @@
+;=============================================
+; ZionOS - Memory Library Routines
+; Created by Pablo George
+; Version 1.0.0 created at 12/13/2022
+;=============================================
+
+%IFNDEF __WMEMORY_LIB__
+%DEFINE __WMEMORY_LIB__
+
+;Memory Window Configurations
+;---------------------------------------------
+%DEFINE WindowAddress 0800h:0500h
+
+%DEFINE WindowBar        3000h
+%DEFINE WindowWidth      3001h
+%DEFINE WindowHeight     3003h
+%DEFINE WindowPositionX  3005h
+%DEFINE WindowPositionY  3007h
+%DEFINE WindowBar_Color  300Ah
+%DEFINE WindowBack_Color 300Bh
+%DEFINE ButtonClose      300Ch
+%DEFINE ButtonMaximize   300Dh
+%DEFINE ButtonMinimize   300Eh
+
+M_InitialPositionX  dw 0000h
+M_InitialPositionY  dw 0000h
+
+StateWindowBar      dw 0000h
+SavePositionX       dw 0000h
+SavePositionY       dw 0000h
+SaveWidth           dw 0000h
+SaveHeight          dw 0000h
+;---------------------------------------------
+
+
+%ENDIF

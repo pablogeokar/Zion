@@ -7,6 +7,9 @@ jmp OSMain
 ; Directives and inclusions=============
 ;---------------------------------------
 %INCLUDE "src/hardware/monitor.lib"
+%INCLUDE "src/hardware/disk.lib"
+%INCLUDE "src/hardware/wmemory.lib"
+
 
 ;=======================================
 ; Starting the System
@@ -17,12 +20,23 @@ OSMain:
   call VGA.SetVideoMode
   call DrawBackground
   call EffectInit
+  call GraficInterface
   jmp END
 ;=======================================
 
 ;=======================================
 ; Kernel Functions  
 ;---------------------------------------
+GraficInterface:
+  mov byte[Sector], 3
+  mov byte[Drive], 80h ; 80h = 1º Disco de boot, 81h = 2º Disco de boot...
+  mov byte[NumSectors], 1
+  mov word[SegmentAddr], 0800h
+  mov word[OffsetAddr], 0500h
+  call ReadDisk
+  call WindowAddress
+ret
+
 ConfigSegment:
   mov ax, es
   mov ds, ax

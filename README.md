@@ -2,8 +2,7 @@
 
 Sistema Operacional Zion
 
-- O objetivo deste projeto é desenvolver um sistema operacional,
-  possuo poucos conhecimentos na área e toda ajuda será bem vinda.
+Sistema Operacional desenvolvido no curso: "desenvolvendo Sistemas Operacionais Simples" da comunidade KiddieOS, a playlist de curso encontra-se disponível em https://www.youtube.com/playlist?list=PLsoiO2Be-2z8BfsSkspJfDiuKeC9-LSca
 
 Ferramentas utilizadas:
 nasm (compilador para assembly) encontrado em www.nasm.us

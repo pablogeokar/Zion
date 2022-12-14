@@ -1,5 +1,5 @@
 ;=============================================
-; ZionOS - Monitor Library Rotines
+; ZionOS - Monitor Library Routines
 ; Created by Pablo George
 ; Version 1.0.0
 ;=============================================
@@ -12,20 +12,8 @@ NameSystem db "ZionOS", 0
 ;---------------------------------------------
 
 
-; Monitor & Windows Configurations ======================
-Window_Bar        dw 3000h
-Window_Width      dw 3001h
-Window_Height     dw 3003h
-Window_PositionX  dw 3005h
-Window_PositionY  dw 3007h
-Window_Bar_Color  dw 300Ah
-Window_Back_Color dw 300Bh
-Button_Close      dw 300Ch
-Button_Maximize   dw 300Dh
-Button_Minimize   dw 300Eh
-State_Window_Bar  dw 0000h
-Count             dw 0000h
-
+; Monitor Configurations ======================
+Count       dw 0000h
 
 BackWidth   dw 0000h
 BackHeight  dw 0000h
@@ -43,9 +31,9 @@ VGA.SetVideoMode:
   mov al, 13h
   int 10h
   mov ax, 320
-  mov WORD[BackWidth], ax
+  mov word[BackWidth], ax
   mov ax, 200
-  mov WORD[BackHeight], ax
+  mov word[BackHeight], ax
   call DrawPixelConfig
 ret
 
@@ -60,11 +48,11 @@ ret
 DrawBackground:
   int 10h
   inc cx
-  cmp cx, WORD[BackWidth]
+  cmp cx, word[BackWidth]
   jne DrawBackground
   mov cx, 0
   inc dx
-  cmp dx, WORD[BackHeight]
+  cmp dx, word[BackHeight]
   jne DrawBackground
   mov dx, 0
 ret
@@ -92,7 +80,7 @@ MoveCursor:
 ret  
 
 EffectInit:
-  mov bl, 0 ; 44
+  mov bl, 44
   Start:
     mov dh, [CursorY]
     mov dl, [CursorX]
@@ -108,7 +96,7 @@ EffectInit:
       popa
       inc bl
       call Waiting 
-      cmp bl, 255 ;50
+      cmp bl, 50
       jne Start
       pusha
       mov bl, 1
@@ -126,8 +114,8 @@ EffectInit:
       mov byte[State], bl
       mov bx, [Count]
       inc bx 
-      mov WORD[Count], bx
-      cmp bx, 5000 ; 50 -> Máquina Virtual
+      mov word[Count], bx
+      cmp bx, 5000
       jne ReturnLoop
       jmp ReturnProg 
     ReturnLoop:
@@ -139,13 +127,19 @@ EffectInit:
 ret
 
 Waiting:
+  ;pusha  
+  ;mov ah, 86h
+  ;mov cx, 0002h ;Tempo = CX:DX 249F0h = 150.000 milisegundos
+  ;mov dx, 49F0h
+  ;int 15h
+  ;popa
   pusha
   mov bx ,0
   time:
     inc bx
     cmp bx, 50000 ; 500 -> Máquina Virtual
     jne time
-  popa
+  popa  
 ret
 ;---------------------------------------------
 
